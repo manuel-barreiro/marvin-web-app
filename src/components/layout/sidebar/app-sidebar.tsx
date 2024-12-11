@@ -15,6 +15,7 @@ import {
 } from "@/components/ui/sidebar"
 import Image from "next/image"
 import Link from "next/link"
+import ThemeToggle from "@/components/theme/ThemeToggle"
 
 const data = {
   user: {
@@ -118,6 +119,11 @@ const data = {
         {
           title: "Limits",
           url: "#",
+        },
+        {
+          title: "Theme",
+          url: "#",
+          component: <ThemeToggle />, // Add this new property
         },
       ],
     },

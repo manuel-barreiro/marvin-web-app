@@ -2,6 +2,8 @@ import type { Metadata } from "next"
 import localFont from "next/font/local"
 import "./globals.css"
 import { AppSidebar } from "@/components/layout/sidebar/app-sidebar"
+import { ThemeProvider } from "@/components/theme/theme-provider"
+import { cookies } from "next/headers"
 
 import { Separator } from "@/components/ui/separator"
 import {
@@ -34,26 +36,35 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode
 }>) {
+  const cookieStore = cookies()
+  const defaultOpen = cookieStore.get("sidebar:state")?.value === "true"
   return (
     <html lang="en">
       <body
         className={`${nestleBrush.variable} ${nestleText.variable} ${nestleScript.variable} font-nestleText antialiased`}
       >
-        <SidebarProvider>
-          <AppSidebar />
-          <SidebarInset>
-            <header className="flex h-16 shrink-0 items-center gap-2">
-              <div className="flex items-center gap-2 px-4">
-                <SidebarTrigger className="-ml-1" />
-                <Separator orientation="vertical" className="mr-2 h-4" />
-                <AppBreadcrumbs />
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
+          <SidebarProvider defaultOpen={defaultOpen}>
+            <AppSidebar />
+            <SidebarInset>
+              <header className="flex h-16 shrink-0 items-center gap-2">
+                <div className="flex items-center gap-2 px-4">
+                  <SidebarTrigger className="-ml-1" />
+                  <Separator orientation="vertical" className="mr-2 h-4" />
+                  <AppBreadcrumbs />
+                </div>
+              </header>
+              <div className="flex flex-1 flex-col gap-4 p-4 pt-0">
+                {children}
               </div>
-            </header>
-            <div className="flex flex-1 flex-col gap-4 p-4 pt-0">
-              {children}
-            </div>
-          </SidebarInset>
-        </SidebarProvider>
+            </SidebarInset>
+          </SidebarProvider>
+        </ThemeProvider>
       </body>
     </html>
   )

@@ -30,6 +30,7 @@ export function NavMain({
     items?: {
       title: string
       url: string
+      component?: React.ReactNode
     }[]
   }[]
 }) {
@@ -59,9 +60,13 @@ export function NavMain({
                       {item.items?.map((subItem) => (
                         <SidebarMenuSubItem key={subItem.title}>
                           <SidebarMenuSubButton asChild>
-                            <a href={subItem.url}>
-                              <span>{subItem.title}</span>
-                            </a>
+                            {subItem.component ? (
+                              <>{subItem.component}</>
+                            ) : (
+                              <a href={subItem.url}>
+                                <span>{subItem.title}</span>
+                              </a>
+                            )}
                           </SidebarMenuSubButton>
                         </SidebarMenuSubItem>
                       ))}
