@@ -4,7 +4,6 @@ import "./globals.css"
 import { AppSidebar } from "@/components/layout/sidebar/app-sidebar"
 import { ThemeProvider } from "@/components/theme/theme-provider"
 import { cookies } from "next/headers"
-
 import { Separator } from "@/components/ui/separator"
 import {
   SidebarInset,
@@ -12,6 +11,7 @@ import {
   SidebarTrigger,
 } from "@/components/ui/sidebar"
 import AppBreadcrumbs from "@/components/layout/AppBreadcrumbs"
+import FilterSheet from "@/components/dashboards/common/FilterSheet"
 
 const nestleBrush = localFont({
   src: "../assets/fonts/NestleBrush-Regular.ttf",
@@ -52,12 +52,13 @@ export default function RootLayout({
           <SidebarProvider defaultOpen={defaultOpen}>
             <AppSidebar />
             <SidebarInset>
-              <header className="flex h-16 shrink-0 items-center gap-2">
-                <div className="flex items-center gap-2 px-4">
+              <header className="flex h-14 shrink-0 items-center justify-between gap-2 px-4">
+                <div className="flex items-center gap-2">
                   <SidebarTrigger className="-ml-1" />
                   <Separator orientation="vertical" className="mr-2 h-4" />
                   <AppBreadcrumbs />
                 </div>
+                <FilterSheet />
               </header>
               <div className="flex flex-1 flex-col gap-4 p-4 pt-0">
                 {children}

@@ -20,13 +20,13 @@ export default function Modules() {
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <ul className="grid gap-2 text-sm">
+            {/* <ul className="grid gap-2 text-sm">
               <li>Executive Summary</li>
               <li>Market Landscape</li>
               <li>Portfolio Map</li>
               <li>Price Pack Piano</li>
               <li>Price Ladder</li>
-            </ul>
+            </ul> */}
           </CardContent>
         </Card>
         <Card>
@@ -38,13 +38,13 @@ export default function Modules() {
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <ul className="grid gap-2 text-sm">
+            {/* <ul className="grid gap-2 text-sm">
               <li>Regular Price & Discount Elasticities</li>
               <li>Volume Transferability</li>
               <li>Cross Price Elasticities</li>
               <li>SKU Delisting</li>
               <li>Promotional Strategy</li>
-            </ul>
+            </ul> */}
           </CardContent>
         </Card>
         <Card>
@@ -54,12 +54,12 @@ export default function Modules() {
             <CardDescription>Strategic decision support</CardDescription>
           </CardHeader>
           <CardContent>
-            <ul className="grid gap-2 text-sm">
+            {/* <ul className="grid gap-2 text-sm">
               <li>Portfolio Planner</li>
               <li>Portfolio Planner Comparison</li>
               <li>Impact Analysis</li>
               <li>Strategy Simulator</li>
-            </ul>
+            </ul> */}
           </CardContent>
         </Card>
       </div>

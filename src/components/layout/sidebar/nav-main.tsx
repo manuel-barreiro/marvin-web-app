@@ -18,6 +18,8 @@ import {
   SidebarMenuSubButton,
   SidebarMenuSubItem,
 } from "@/components/ui/sidebar"
+import { usePathname } from "next/navigation"
+import Link from "next/link"
 
 export function NavMain({
   items,
@@ -34,18 +36,34 @@ export function NavMain({
     }[]
   }[]
 }) {
+  const pathname = usePathname() // Add this hook
+
+  // Helper function to check if an item is active
+  const isItemActive = (item: (typeof items)[0]) => {
+    if (item.url && pathname === item.url) return true
+    if (item.items?.some((subItem) => subItem.url === pathname)) return true
+    return false
+  }
   return (
     <SidebarGroup>
       <SidebarGroupLabel>Platform</SidebarGroupLabel>
       <SidebarMenu>
         {items.map((item) => (
-          <Collapsible key={item.title} asChild defaultOpen={item.isActive}>
+          <Collapsible
+            key={item.title}
+            asChild
+            defaultOpen={isItemActive(item)}
+          >
             <SidebarMenuItem>
-              <SidebarMenuButton asChild tooltip={item.title}>
-                <a href={item.url}>
+              <SidebarMenuButton
+                asChild
+                tooltip={item.title}
+                isActive={isItemActive(item)} // Update this line
+              >
+                <Link href={item.url || ""}>
                   <item.icon />
                   <span>{item.title}</span>
-                </a>
+                </Link>
               </SidebarMenuButton>
               {item.items?.length ? (
                 <>
@@ -59,13 +77,16 @@ export function NavMain({
                     <SidebarMenuSub>
                       {item.items?.map((subItem) => (
                         <SidebarMenuSubItem key={subItem.title}>
-                          <SidebarMenuSubButton asChild>
+                          <SidebarMenuSubButton
+                            asChild
+                            isActive={pathname === subItem.url}
+                          >
                             {subItem.component ? (
                               <>{subItem.component}</>
                             ) : (
-                              <a href={subItem.url}>
+                              <Link href={subItem.url}>
                                 <span>{subItem.title}</span>
-                              </a>
+                              </Link>
                             )}
                           </SidebarMenuSubButton>
                         </SidebarMenuSubItem>

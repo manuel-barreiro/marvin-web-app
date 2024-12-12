@@ -113,14 +113,6 @@ const data = {
           url: "#",
         },
         {
-          title: "Billing",
-          url: "#",
-        },
-        {
-          title: "Limits",
-          url: "#",
-        },
-        {
           title: "Theme",
           url: "#",
           component: <ThemeToggle />, // Add this new property
