@@ -1,5 +1,29 @@
+import { Suspense } from "react"
 import TestDashboard from "@/components/dashboards/sell-in/test/TestDashboard"
+import { Loader } from "lucide-react"
+import { TestDashboardData } from "@/types/test-dashboard"
 
-export default function page() {
-  return <TestDashboard />
+async function getTestDashboardData(): Promise<TestDashboardData> {
+  // Server-side fetch
+  const response = await fetch(`http://localhost:3000/api/sell-in/test`)
+  if (!response.ok) {
+    throw new Error("Failed to fetch dashboard data")
+  }
+  const data = await response.json()
+  return data
+}
+
+export default async function Page() {
+  const testDashboardData = await getTestDashboardData()
+  return (
+    <Suspense
+      fallback={
+        <section className="flex h-[85dvh] w-full flex-col items-center justify-center gap-1">
+          <Loader className="h-16 w-16 animate-spin" />
+        </section>
+      }
+    >
+      <TestDashboard testDashboardData={testDashboardData} />
+    </Suspense>
+  )
 }

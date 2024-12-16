@@ -24,12 +24,6 @@ export default function StatCard({
   percentage,
   icon,
 }: StatCardProps) {
-  const [defaultValue, setDefaultValue] = useState(0)
-  const [defaultPercentage, setDefaultPercentage] = useState(0)
-  useEffect(() => {
-    setTimeout(() => setDefaultValue(value), 100)
-    setTimeout(() => setDefaultPercentage(percentage), 100)
-  }, [])
   return (
     <Card className="">
       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
@@ -39,7 +33,7 @@ export default function StatCard({
       <CardContent>
         <div className="text-2xl font-bold">
           <NumberFlow
-            value={defaultValue}
+            value={value}
             format={{
               style: "currency",
               currency: "MXN",
@@ -52,7 +46,7 @@ export default function StatCard({
         <p className="flex items-center gap-1 text-sm text-green-600">
           <span>
             <NumberFlow
-              value={defaultPercentage}
+              value={percentage}
               format={{
                 trailingZeroDisplay: "stripIfInteger",
               }}
