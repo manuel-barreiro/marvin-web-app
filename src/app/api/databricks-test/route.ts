@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server"
-import { DBSQLClient } from "@databricks/sql"
-import IDBSQLSession from "@databricks/sql/dist/contracts/IDBSQLSession"
-import IOperation from "@databricks/sql/dist/contracts/IOperation"
+import { DBSQLClient } from "databricks-sql-nodejs"
+import IDBSQLSession from "databricks-sql-nodejs/dist/contracts/IDBSQLSession"
+import IOperation from "databricks-sql-nodejs/dist/contracts/IOperation"
 
 export async function GET(request: NextRequest) {
   const serverHostname: string = process.env.DATABRICKS_SERVER_HOSTNAME || ""
@@ -29,7 +29,7 @@ export async function GET(request: NextRequest) {
     console.log("SESSION CREATED")
 
     const queryOperation: IOperation = await session.executeStatement(
-      "select distinct idRetailer, cliente4_dsc_nestle from cpfr_solution.tb_cpfr_dim_stores"
+"select distinct RET_ID from cpfr_solution.tb_cpfr_dim_stores where idRetailer = 101 limit 100"
     )
     console.log("QUERY EXECUTED")
 
