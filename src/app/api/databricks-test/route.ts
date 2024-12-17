@@ -29,18 +29,18 @@ export async function GET(request: NextRequest) {
     console.log("SESSION CREATED")
 
     const queryOperation: IOperation = await session.executeStatement(
-      "SELECT * FROM cpfr_solution.tb_cpfr_dim_stores LIMIT 2",
-      {
-        runAsync: true,
-        maxRows: 10000,
-      }
+      "select distinct idRetailer, cliente4_dsc_nestle from cpfr_solution.tb_cpfr_dim_stores"
     )
     console.log("QUERY EXECUTED")
 
     const result = await queryOperation.fetchAll()
     await queryOperation.close()
+    console.table(result)
+
     await session.close()
+    console.log("SESSION CLOSED")
     await client.close()
+    console.log("CLIENT CLOSED")
 
     return NextResponse.json(result, { status: 200 })
   } catch (error) {

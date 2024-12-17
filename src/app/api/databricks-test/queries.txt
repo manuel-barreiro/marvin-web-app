@@ -1,0 +1,11 @@
+-- Filtro Cliente
+
+"select distinct idRetailer, cliente4_dsc_nestle from cpfr_solution.tb_cpfr_dim_stores limit 100"
+
+-- Tiendas Por Cliente
+
+"select distinct RET_ID from cpfr_solution.tb_cpfr_dim_stores where idRetailer = 101 limit 100"
+
+-- Filtro de Productos
+
+"select distinct SKU_ID, DESCRIPCION_DSC, CATEGORIA,MATERIAL_GROUP, GRUPO_NEGOCIO from cpfr_solution.pbi_products limit 10"
