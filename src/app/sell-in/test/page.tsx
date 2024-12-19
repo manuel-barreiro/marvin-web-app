@@ -1,11 +1,11 @@
 import { Suspense } from "react"
 import TestDashboard from "@/components/dashboards/sell-in/test/TestDashboard"
 import { Loader } from "lucide-react"
-import { TestDashboardData } from "@/types/test-dashboard"
+import { TestDashboardResponse } from "@/types/test-dashboard"
 import FilterSheet from "@/components/dashboards/common/FilterSheet"
 import CurrentFilters from "@/components/dashboards/common/CurrentFilters"
 
-async function getTestDashboardData(): Promise<TestDashboardData> {
+async function getTestDashboardData(): Promise<TestDashboardResponse> {
   // Server-side fetch
   const response = await fetch(`http://localhost:3000/api/sell-in/test`)
   if (!response.ok) {
@@ -16,7 +16,8 @@ async function getTestDashboardData(): Promise<TestDashboardData> {
 }
 
 export default async function Page() {
-  const testDashboardData = await getTestDashboardData()
+  const data = await getTestDashboardData()
+  // console.log(data.filters.stores)
   return (
     <Suspense
       fallback={
@@ -27,9 +28,12 @@ export default async function Page() {
     >
       <div className="flex items-center justify-between">
         <CurrentFilters />
-        <FilterSheet />
+        <FilterSheet filters={data.filters} />
       </div>
-      <TestDashboard testDashboardData={testDashboardData} />
+      <TestDashboard
+        metrics={data.testDashboardData.metrics}
+        composed_chart={data.testDashboardData.composed_chart}
+      />
     </Suspense>
   )
 }

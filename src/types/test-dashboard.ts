@@ -20,15 +20,25 @@ export interface ChartDataPoint {
 export interface TestDashboardData {
   metrics: Metrics
   composed_chart: ChartDataPoint[]
-  filters: TestDashboardFilters
 }
 
 export interface TestDashboardFilters {
-  dateRange: {
-    from: string
-    to: string
-  }
-  clients: string[]
-  stores: string[]
-  products: string[]
+  clients: Array<{
+    value: string
+    label: string
+  }>
+  stores: Array<{
+    value: string
+    label: string
+    clientId: string
+  }>
+  products: Array<{
+    value: string
+    label: string
+  }>
+}
+
+export interface TestDashboardResponse {
+  testDashboardData: TestDashboardData
+  filters: TestDashboardFilters
 }

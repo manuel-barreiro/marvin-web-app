@@ -71,19 +71,39 @@ const frameworks: Option[] = [
 export default function MultiSelect({
   label,
   placeholder,
+  data,
+  onChange,
+  disabled,
+  value, // Add this
 }: {
   label?: string
   placeholder?: string
+  data?: Option[]
+  onChange?: (selected: Option[]) => void
+  disabled?: boolean
+  value?: Option[] // Add this
 }) {
+  // Add debug log
+  console.log("MultiSelect Props:", {
+    label,
+    data,
+    value,
+    disabled,
+  })
   return (
     <div className="space-y-2">
       <Label>{label}</Label>
       <MultipleSelector
+        value={value} // Add this
+        disabled={disabled}
+        onChange={onChange}
+        hidePlaceholderWhenSelected
         commandProps={{
           label: placeholder,
         }}
-        defaultOptions={frameworks}
+        // defaultOptions={data}
         placeholder={placeholder}
+        options={data || frameworks}
         emptyIndicator={<p className="text-center text-sm">No results found</p>}
       />
     </div>

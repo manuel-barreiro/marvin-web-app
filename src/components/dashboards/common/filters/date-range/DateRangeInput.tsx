@@ -75,8 +75,8 @@ interface Preset {
 
 // Define presets
 const PRESETS: Preset[] = [
-  { name: "today", label: "Today" },
-  { name: "yesterday", label: "Yesterday" },
+  // { name: "today", label: "Today" },
+  // { name: "yesterday", label: "Yesterday" },
   { name: "last7", label: "Last 7 days" },
   { name: "last14", label: "Last 14 days" },
   { name: "last30", label: "Last 30 days" },
