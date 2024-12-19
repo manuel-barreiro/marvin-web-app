@@ -2,6 +2,8 @@ import { Suspense } from "react"
 import TestDashboard from "@/components/dashboards/sell-in/test/TestDashboard"
 import { Loader } from "lucide-react"
 import { TestDashboardData } from "@/types/test-dashboard"
+import FilterSheet from "@/components/dashboards/common/FilterSheet"
+import CurrentFilters from "@/components/dashboards/common/CurrentFilters"
 
 async function getTestDashboardData(): Promise<TestDashboardData> {
   // Server-side fetch
@@ -23,6 +25,10 @@ export default async function Page() {
         </section>
       }
     >
+      <div className="flex items-center justify-between">
+        <CurrentFilters />
+        <FilterSheet />
+      </div>
       <TestDashboard testDashboardData={testDashboardData} />
     </Suspense>
   )

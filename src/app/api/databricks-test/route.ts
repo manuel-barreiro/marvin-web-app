@@ -29,7 +29,7 @@ export async function GET(request: NextRequest) {
     console.log("SESSION CREATED")
 
     const queryOperation: IOperation = await session.executeStatement(
-"select distinct RET_ID from cpfr_solution.tb_cpfr_dim_stores where idRetailer = 101 limit 100"
+      "select distinct RET_ID from cpfr_solution.tb_cpfr_dim_stores where idRetailer = 101"
     )
     console.log("QUERY EXECUTED")
 
