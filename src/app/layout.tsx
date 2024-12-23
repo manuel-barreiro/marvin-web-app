@@ -12,6 +12,7 @@ import {
 } from "@/components/ui/sidebar"
 import AppBreadcrumbs from "@/components/layout/AppBreadcrumbs"
 import FilterSheet from "@/components/dashboards/common/FilterSheet"
+import { ReactQueryProvider } from "@/providers/react-query-provider"
 
 const nestleBrush = localFont({
   src: "../assets/fonts/NestleBrush-Regular.ttf",
@@ -58,10 +59,9 @@ export default function RootLayout({
                   <Separator orientation="vertical" className="mr-2 h-4" />
                   <AppBreadcrumbs />
                 </div>
-                {/* <FilterSheet /> */}
               </header>
               <div className="flex flex-1 flex-col gap-4 p-4 pt-0">
-                {children}
+                <ReactQueryProvider>{children}</ReactQueryProvider>
               </div>
             </SidebarInset>
           </SidebarProvider>

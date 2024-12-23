@@ -1,9 +1,9 @@
-import { NextRequest, NextResponse } from "next/server"
+import { NextResponse } from "next/server"
 import { DBSQLClient } from "databricks-sql-nodejs"
 import IDBSQLSession from "databricks-sql-nodejs/dist/contracts/IDBSQLSession"
 import IOperation from "databricks-sql-nodejs/dist/contracts/IOperation"
 
-export async function GET(request: NextRequest) {
+export async function GET() {
   const serverHostname: string = process.env.DATABRICKS_SERVER_HOSTNAME || ""
   const httpPath: string = process.env.DATABRICKS_HTTP_PATH || ""
   const token: string = process.env.DATABRICKS_TOKEN || ""
@@ -14,7 +14,6 @@ export async function GET(request: NextRequest) {
       { status: 500 }
     )
   }
-
   try {
     const client: DBSQLClient = new DBSQLClient()
     console.log("CREATED CLIENT")
@@ -28,26 +27,29 @@ export async function GET(request: NextRequest) {
     const session: IDBSQLSession = await client.openSession()
     console.log("SESSION CREATED")
 
-    const queryOperation: IOperation = await session.executeStatement(
-      "select distinct CATEGORIA from cpfr_solution.pbi_products"
-      // "select distinct CATEGORIA from cpfr_solution.pbi_products"
+    const operation = await session.executeStatement(
+      "select distinct idRetailer, cliente4_dsc_nestle from cpfr_solution.tb_cpfr_dim_stores"
     )
-    console.log("QUERY EXECUTED")
+    console.log("CLIENTS QUERY EXECUTED")
+    const results = await operation.fetchAll()
 
-    const result = await queryOperation.fetchAll()
-    await queryOperation.close()
-    console.table(result)
+    const mappedResults = results
+      .filter((item: any) => item.cliente4_dsc_nestle !== null)
+      .map((item: any) => ({
+        value: item.idRetailer.toString(),
+        label: item.cliente4_dsc_nestle,
+      }))
 
+    await operation.close()
     await session.close()
     console.log("SESSION CLOSED")
     await client.close()
     console.log("CLIENT CLOSED")
 
-    return NextResponse.json(result, { status: 200 })
+    return NextResponse.json(mappedResults)
   } catch (error) {
-    console.error(error)
     return NextResponse.json(
-      { error: "Failed to fetch data from Databricks" },
+      { error: "Failed to fetch clients" },
       { status: 500 }
     )
   }

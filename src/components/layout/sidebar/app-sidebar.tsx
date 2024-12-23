@@ -39,6 +39,10 @@ const data = {
           url: "/sell-in/test",
         },
         {
+          title: "Test v2",
+          url: "/sell-in/test_v2",
+        },
+        {
           title: "Última Proyección",
           url: "/sell-in/last-projection",
         },

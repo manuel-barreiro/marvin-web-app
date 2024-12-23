@@ -73,6 +73,7 @@ export default function MultiSelect({
   placeholder,
   data,
   onChange,
+  // onSearch,
   disabled,
   value, // Add this
 }: {
@@ -80,6 +81,7 @@ export default function MultiSelect({
   placeholder?: string
   data?: Option[]
   onChange?: (selected: Option[]) => void
+  // onSearch?: (value: string) => Promise<Option[]>
   disabled?: boolean
   value?: Option[] // Add this
 }) {
@@ -89,6 +91,7 @@ export default function MultiSelect({
     data,
     value,
     disabled,
+    // onSearch
   })
   return (
     <div className="space-y-2">
@@ -97,6 +100,7 @@ export default function MultiSelect({
         value={value} // Add this
         disabled={disabled}
         onChange={onChange}
+        // onSearch={onSearch}
         hidePlaceholderWhenSelected
         commandProps={{
           label: placeholder,

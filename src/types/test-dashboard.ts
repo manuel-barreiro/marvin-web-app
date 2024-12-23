@@ -42,3 +42,8 @@ export interface TestDashboardResponse {
   testDashboardData: TestDashboardData
   filters: TestDashboardFilters
 }
+
+export interface SelectValueType {
+  value: string
+  label: string
+}
