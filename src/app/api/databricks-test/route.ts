@@ -29,7 +29,7 @@ export async function GET(request: NextRequest) {
     console.log("SESSION CREATED")
 
     const queryOperation: IOperation = await session.executeStatement(
-      "select distinct CATEGORIA from cpfr_solution.pbi_products"
+      "select distinct idRetailer, cliente4_dsc_nestle from cpfr_solution.tb_cpfr_dim_stores limit 100"
       // "select distinct CATEGORIA from cpfr_solution.pbi_products"
     )
     console.log("QUERY EXECUTED")
