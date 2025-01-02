@@ -1,13 +1,6 @@
 "use client"
-
-import { useState, useMemo, useEffect } from "react"
-import {
-  useFilterStore,
-  FILTER_TYPES,
-  FilterType,
-  FILTER_HIERARCHY,
-} from "@/store/filterStore"
-import { useFilterQuery } from "@/hooks/useFilters"
+import { useState } from "react"
+import { useFilterStore, FilterType } from "@/store/filterStore"
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
 import { Button } from "@/components/ui/button"
 import { Filter } from "lucide-react"
@@ -23,42 +16,26 @@ import {
 
 export default function FilterSheet() {
   const {
+    filterConfigs,
     activeFilters,
     selectedFilters,
-    setActiveFilters,
+    addFilter,
+    removeFilter,
     setSelectedFilters,
+    getAvailableFilterTypes,
   } = useFilterStore()
 
   const [isAddingFilter, setIsAddingFilter] = useState(false)
 
-  useEffect(() => {
-    console.log(activeFilters)
-  }, [activeFilters])
-
-  const availableFilterTypes = useMemo(() => {
-    if (activeFilters.length === 0) {
-      return Object.keys(FILTER_TYPES) as FilterType[]
-    }
-
-    const lastActiveFilter = activeFilters[activeFilters.length - 1]
-    return FILTER_HIERARCHY[lastActiveFilter]
-  }, [activeFilters])
+  const availableFilterTypes = getAvailableFilterTypes()
 
   const handleAddFilter = (type: FilterType) => {
-    setActiveFilters([...activeFilters, type])
+    addFilter(type)
     setIsAddingFilter(false)
   }
 
   const handleRemoveFilter = (index: number) => {
-    const newActiveFilters = activeFilters.slice(0, index)
-    setActiveFilters(newActiveFilters)
-
-    // Reset selected filters for removed filter and its dependents
-    const removedFilter = activeFilters[index]
-    const filtersToReset = [removedFilter, ...FILTER_HIERARCHY[removedFilter]]
-    filtersToReset.forEach((filterType) => {
-      setSelectedFilters(filterType, [])
-    })
+    removeFilter(index)
   }
 
   return (
@@ -80,7 +57,9 @@ export default function FilterSheet() {
           ))}
 
           {!isAddingFilter &&
-            activeFilters.length < Object.keys(FILTER_TYPES).length && (
+            availableFilterTypes.length > 0 &&
+            !filterConfigs[activeFilters[activeFilters.length - 1]]
+              ?.isTerminal && (
               <Button variant="link" onClick={() => setIsAddingFilter(true)}>
                 + Add Filter
               </Button>
@@ -96,7 +75,7 @@ export default function FilterSheet() {
               <SelectContent>
                 {availableFilterTypes.map((type) => (
                   <SelectItem key={type} value={type}>
-                    {FILTER_TYPES[type]}
+                    {filterConfigs[type].label}
                   </SelectItem>
                 ))}
               </SelectContent>
@@ -119,54 +98,28 @@ function FilterComponent({
   index,
   onRemove,
 }: FilterComponentProps) {
-  const { activeFilters, selectedFilters, setSelectedFilters } =
+  const { filterConfigs, selectedFilters, setSelectedFilters } =
     useFilterStore()
-
-  const dependentFilters = useMemo(() => {
-    const filters: Record<FilterType, string[]> = {
-      CLIENT: [],
-      STORE: [],
-      BUSINESS_GROUP: [],
-      CATEGORY: [],
-      MATERIAL_GROUP: [],
-      SKU_ID: [],
-    }
-    for (let i = 0; i < index; i++) {
-      const type = activeFilters[i]
-      filters[type] = selectedFilters[type].map((option) => option.value)
-    }
-    return filters
-  }, [activeFilters, index, selectedFilters])
-
-  // const { data, isLoading } = useFilterQuery(filterType, dependentFilters)
 
   const handleChange = (options: Option[]) => {
     setSelectedFilters(filterType, options)
-
-    // Reset dependent filters
-    const dependentFiltersToReset = FILTER_HIERARCHY[filterType]
-    dependentFiltersToReset.forEach((dependentFilter) => {
-      if (activeFilters.includes(dependentFilter)) {
-        setSelectedFilters(dependentFilter, [])
-      }
-    })
   }
 
   return (
     <div className="flex flex-col gap-2">
       <div className="flex items-center justify-between">
-        <span className="text-sm font-medium">{FILTER_TYPES[filterType]}</span>
+        <span className="text-sm font-medium">
+          {filterConfigs[filterType].label}
+        </span>
         <Button variant="ghost" size="sm" onClick={() => onRemove(index)}>
           Remove
         </Button>
       </div>
       <MultiSelect
-        placeholder={`Select ${FILTER_TYPES[filterType].toLowerCase()}/s`}
-        // data={data || []}
-        data={[]}
+        placeholder={`Select ${filterConfigs[filterType].label.toLowerCase()}/s`}
+        data={[]} // You'll need to implement a way to fetch this data
         onChange={handleChange}
-        value={selectedFilters[filterType]}
-        // disabled={isLoading}
+        value={selectedFilters[filterType] || []}
       />
     </div>
   )

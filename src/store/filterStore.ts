@@ -1,44 +1,32 @@
 import { create } from "zustand"
 import { Option } from "@/components/ui/multiselect"
 
-export const FILTER_TYPES = {
-  CLIENT: "Client",
-  STORE: "Store",
-  BUSINESS_GROUP: "Business Group",
-  CATEGORY: "Category",
-  MATERIAL_GROUP: "Material Group",
-  SKU_ID: "SKU",
-} as const
+export type FilterType = string
 
-export type FilterType = keyof typeof FILTER_TYPES
-
-export const FILTER_HIERARCHY: Record<FilterType, FilterType[]> = {
-  CLIENT: ["STORE", "BUSINESS_GROUP", "CATEGORY", "MATERIAL_GROUP", "SKU_ID"],
-  STORE: ["CATEGORY", "MATERIAL_GROUP", "SKU_ID"],
-  BUSINESS_GROUP: ["CATEGORY", "MATERIAL_GROUP", "SKU_ID"],
-  CATEGORY: ["MATERIAL_GROUP", "SKU_ID"],
-  MATERIAL_GROUP: ["SKU_ID"],
-  SKU_ID: [],
+export interface FilterConfig {
+  label: string
+  excludeOptions?: FilterType[]
+  isTerminal?: boolean
 }
 
 interface FilterState {
+  filterConfigs: Record<FilterType, FilterConfig>
   activeFilters: FilterType[]
   selectedFilters: Record<FilterType, Option[]>
+  setFilterConfigs: (configs: Record<FilterType, FilterConfig>) => void
   setActiveFilters: (filters: FilterType[]) => void
   setSelectedFilters: (type: FilterType, options: Option[]) => void
+  addFilter: (type: FilterType) => void
+  removeFilter: (index: number) => void
+  getAvailableFilterTypes: () => FilterType[]
   resetFilters: () => void
 }
 
-export const useFilterStore = create<FilterState>((set) => ({
+export const useFilterStore = create<FilterState>((set, get) => ({
+  filterConfigs: {},
   activeFilters: [],
-  selectedFilters: {
-    CLIENT: [],
-    STORE: [],
-    BUSINESS_GROUP: [],
-    CATEGORY: [],
-    MATERIAL_GROUP: [],
-    SKU_ID: [],
-  },
+  selectedFilters: {},
+  setFilterConfigs: (configs) => set({ filterConfigs: configs }),
   setActiveFilters: (filters) => set({ activeFilters: filters }),
   setSelectedFilters: (type, options) =>
     set((state) => ({
@@ -47,16 +35,35 @@ export const useFilterStore = create<FilterState>((set) => ({
         [type]: options,
       },
     })),
+  addFilter: (type) =>
+    set((state) => ({
+      activeFilters: [...state.activeFilters, type],
+    })),
+  removeFilter: (index) =>
+    set((state) => {
+      const newActiveFilters = state.activeFilters.filter((_, i) => i !== index)
+      const newSelectedFilters = { ...state.selectedFilters }
+      delete newSelectedFilters[state.activeFilters[index]]
+      return {
+        activeFilters: newActiveFilters,
+        selectedFilters: newSelectedFilters,
+      }
+    }),
+  getAvailableFilterTypes: () => {
+    const { filterConfigs, activeFilters } = get()
+    const allFilterTypes = Object.keys(filterConfigs)
+    const excludedTypes = new Set(
+      activeFilters.flatMap(
+        (filter) => filterConfigs[filter].excludeOptions || []
+      )
+    )
+    return allFilterTypes.filter(
+      (type) => !excludedTypes.has(type) && !activeFilters.includes(type)
+    )
+  },
   resetFilters: () =>
     set({
       activeFilters: [],
-      selectedFilters: {
-        CLIENT: [],
-        STORE: [],
-        BUSINESS_GROUP: [],
-        CATEGORY: [],
-        MATERIAL_GROUP: [],
-        SKU_ID: [],
-      },
+      selectedFilters: {},
     }),
 }))
