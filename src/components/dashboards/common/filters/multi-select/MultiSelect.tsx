@@ -85,14 +85,6 @@ export default function MultiSelect({
   disabled?: boolean
   value?: Option[] // Add this
 }) {
-  // Add debug log
-  console.log("MultiSelect Props:", {
-    label,
-    data,
-    value,
-    disabled,
-    // onSearch
-  })
   return (
     <div className="space-y-2">
       <Label>{label}</Label>

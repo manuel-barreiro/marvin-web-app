@@ -17,7 +17,6 @@ async function getTestDashboardData(): Promise<TestDashboardResponse> {
 
 export default async function Page() {
   const data = await getTestDashboardData()
-  // console.log(data.filters.stores)
   return (
     <Suspense
       fallback={
@@ -28,7 +27,7 @@ export default async function Page() {
     >
       <div className="flex items-center justify-between">
         <CurrentFilters />
-        <FilterSheet filters={data.filters} />
+        <FilterSheet />
       </div>
       <TestDashboard
         metrics={data.testDashboardData.metrics}

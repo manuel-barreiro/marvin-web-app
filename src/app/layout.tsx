@@ -11,7 +11,6 @@ import {
   SidebarTrigger,
 } from "@/components/ui/sidebar"
 import AppBreadcrumbs from "@/components/layout/AppBreadcrumbs"
-import FilterSheet from "@/components/dashboards/common/FilterSheet"
 import { ReactQueryProvider } from "@/providers/react-query-provider"
 
 const nestleBrush = localFont({

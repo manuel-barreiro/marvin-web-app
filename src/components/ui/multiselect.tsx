@@ -470,10 +470,10 @@ const MultipleSelector = React.forwardRef<
           }}
         >
           <div className="relative flex flex-wrap gap-1">
-            {selected.map((option) => {
+            {selected.map((option, idx) => {
               return (
                 <Badge
-                  key={option.value}
+                  key={idx}
                   className={cn(
                     "data-[disabled]:bg-muted-foreground data-[disabled]:text-muted data-[disabled]:hover:bg-muted-foreground",
                     "data-[fixed]:bg-muted-foreground data-[fixed]:text-muted data-[fixed]:hover:bg-muted-foreground",
@@ -589,10 +589,10 @@ const MultipleSelector = React.forwardRef<
                       className="h-full overflow-auto"
                     >
                       <>
-                        {dropdowns.map((option) => {
+                        {dropdowns.map((option, idx) => {
                           return (
                             <CommandItem
-                              key={option.value}
+                              key={idx}
                               value={option.label}
                               disabled={option.disable}
                               onMouseDown={(e) => {

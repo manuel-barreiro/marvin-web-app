@@ -1,53 +1,62 @@
 import { create } from "zustand"
 import { Option } from "@/components/ui/multiselect"
 
+export const FILTER_TYPES = {
+  CLIENT: "Client",
+  STORE: "Store",
+  BUSINESS_GROUP: "Business Group",
+  CATEGORY: "Category",
+  MATERIAL_GROUP: "Material Group",
+  SKU_ID: "SKU",
+} as const
+
+export type FilterType = keyof typeof FILTER_TYPES
+
+export const FILTER_HIERARCHY: Record<FilterType, FilterType[]> = {
+  CLIENT: ["STORE", "BUSINESS_GROUP", "CATEGORY", "MATERIAL_GROUP", "SKU_ID"],
+  STORE: ["CATEGORY", "MATERIAL_GROUP", "SKU_ID"],
+  BUSINESS_GROUP: ["CATEGORY", "MATERIAL_GROUP", "SKU_ID"],
+  CATEGORY: ["MATERIAL_GROUP", "SKU_ID"],
+  MATERIAL_GROUP: ["SKU_ID"],
+  SKU_ID: [],
+}
+
 interface FilterState {
-  selectedClients: Option[]
-  selectedStores: Option[]
-  selectedCategories: Option[]
-  selectedMaterialGroups: Option[]
-  selectedBusinessGroups: Option[]
-  selectedSkuIDs: Option[]
-  setSelectedClients: (clients: Option[]) => void
-  setSelectedStores: (stores: Option[]) => void
-  setSelectedCategories: (category: Option[]) => void
-  setSelectedMaterialGroups: (groups: Option[]) => void
-  setSelectedBusinessGroups: (groups: Option[]) => void
-  setSelectedSkuIDs: (skus: Option[]) => void
+  activeFilters: FilterType[]
+  selectedFilters: Record<FilterType, Option[]>
+  setActiveFilters: (filters: FilterType[]) => void
+  setSelectedFilters: (type: FilterType, options: Option[]) => void
   resetFilters: () => void
 }
 
 export const useFilterStore = create<FilterState>((set) => ({
-  selectedClients: [],
-  selectedStores: [],
-  selectedCategories: [],
-  selectedMaterialGroups: [],
-  selectedBusinessGroups: [],
-  selectedSkuIDs: [],
-  setSelectedClients: (clients) =>
-    set({ selectedClients: clients, selectedStores: [] }),
-  setSelectedStores: (stores) =>
-    set({ selectedStores: stores, selectedCategories: [] }),
-  setSelectedCategories: (category) =>
-    set({
-      selectedCategories: category,
-      selectedMaterialGroups: [],
-    }),
-  setSelectedMaterialGroups: (groups) =>
-    set({
-      selectedMaterialGroups: groups,
-      selectedSkuIDs: [],
-    }),
-  setSelectedBusinessGroups: (groups) =>
-    set({ selectedBusinessGroups: groups }),
-  setSelectedSkuIDs: (skus) => set({ selectedSkuIDs: skus }),
+  activeFilters: [],
+  selectedFilters: {
+    CLIENT: [],
+    STORE: [],
+    BUSINESS_GROUP: [],
+    CATEGORY: [],
+    MATERIAL_GROUP: [],
+    SKU_ID: [],
+  },
+  setActiveFilters: (filters) => set({ activeFilters: filters }),
+  setSelectedFilters: (type, options) =>
+    set((state) => ({
+      selectedFilters: {
+        ...state.selectedFilters,
+        [type]: options,
+      },
+    })),
   resetFilters: () =>
     set({
-      selectedClients: [],
-      selectedStores: [],
-      selectedCategories: [],
-      selectedMaterialGroups: [],
-      selectedBusinessGroups: [],
-      selectedSkuIDs: [],
+      activeFilters: [],
+      selectedFilters: {
+        CLIENT: [],
+        STORE: [],
+        BUSINESS_GROUP: [],
+        CATEGORY: [],
+        MATERIAL_GROUP: [],
+        SKU_ID: [],
+      },
     }),
 }))
